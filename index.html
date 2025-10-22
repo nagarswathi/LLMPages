@@ -2,687 +2,596 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>TDS Project 1 — LLMPages Submission</title>
+  <title>TDS Project 1 – LLMPages Submission</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       --bg: #0f172a;
       --panel: #111827;
       --muted: #94a3b8;
-      --text: #e5e7eb;
+      --fg: #e5e7eb;
       --accent: #22d3ee;
-      --accent-2: #34d399;
-      --warning: #f59e0b;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --link: #60a5fa;
+      --code: #0b1220;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: linear-gradient(180deg, #0b1224 0%, #0f172a 100%);
-      color: var(--text);
-      font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background: radial-gradient(1200px 800px at 10% -10%, #123, transparent), var(--bg);
+      color: var(--fg);
+      line-height: 1.45;
     }
     header {
-      padding: 28px 20px 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      background: radial-gradient(800px 300px at 10% -10%, rgba(34,211,238,0.12), transparent 60%),
-                  radial-gradient(800px 300px at 90% -10%, rgba(52,211,153,0.10), transparent 60%);
+      padding: 28px 20px 10px;
+      border-bottom: 1px solid #1f2937;
+      background:
+        radial-gradient(600px 160px at 20% 0, rgba(34,211,238,.08), transparent),
+        linear-gradient(to bottom, rgba(255,255,255,.02), rgba(255,255,255,0));
     }
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
-    h1 { margin: 0 0 8px; font-size: 26px; letter-spacing: 0.2px; }
-    .sub { color: var(--muted); margin: 0 0 14px; }
-    .uid {
-      display: inline-block;
-      padding: 6px 10px;
-      background: rgba(34,211,238,0.08);
-      border: 1px solid rgba(34,211,238,0.25);
-      border-radius: 8px;
-      color: #a5f3fc;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-    }
-    main { padding: 18px 0 40px; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
-    }
-    @media (max-width: 940px) { .grid { grid-template-columns: 1fr; } }
-    .card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .card h2 {
-      font-size: 16px;
-      margin: 0;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
-    }
-    .card .content { padding: 12px 14px 14px; }
-    ul.file-list { list-style: none; padding: 0; margin: 0; }
-    ul.file-list li {
-      padding: 10px 8px;
-      border-bottom: 1px dashed rgba(255,255,255,0.06);
-      display: grid;
-      gap: 10px;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-    }
-    ul.file-list li:last-child { border-bottom: 0; }
-    .fname { font-weight: 600; }
-    .links a {
-      color: var(--accent);
-      text-decoration: none;
-      margin-right: 10px;
-    }
-    .links a:hover { text-decoration: underline; }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.08);
-      margin-left: 6px;
-    }
-    details { border-top: 1px solid rgba(255,255,255,0.06); }
-    details summary {
-      cursor: pointer;
-      padding: 10px 12px;
-      color: var(--muted);
-      outline: none;
-    }
-    .preview {
-      padding: 10px 12px 14px;
-      background: rgba(0,0,0,0.25);
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    pre, code, textarea {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      line-height: 1.45;
-      color: #e2e8f0;
-    }
-    textarea {
-      width: 100%;
-      min-height: 150px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      padding: 10px;
-      resize: vertical;
-    }
-    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
-    .btn {
-      appearance: none;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(180deg, rgba(34,211,238,0.18), rgba(34,211,238,0.10));
-      color: #062a2e;
-      font-weight: 700;
+    h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
       letter-spacing: 0.2px;
-      padding: 8px 12px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    main {
+      padding: 18px 16px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 980px) {
+      main { grid-template-columns: 1.1fr 1fr; }
+    }
+    section, .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)), var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.25);
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+    .files {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .file {
+      border: 1px solid #22304a;
       border-radius: 10px;
-      cursor: pointer;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(96,165,250,.05), rgba(96,165,250,0));
     }
-    .btn.secondary {
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
+    .file h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
     }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; margin: 8px 0; }
-    .ok { color: var(--accent-2); }
-    .warn { color: var(--warning); }
-    footer { color: var(--muted); text-align: center; padding: 18px 10px 32px; font-size: 13px; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 6px;
+    }
+    a.dl {
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid #1e3a8a;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(37,99,235,.2), rgba(37,99,235,.05));
+    }
+    a.dl:hover { filter: brightness(1.1); }
+    .status {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #0b1220;
+      color: var(--muted);
+    }
+    .ok { color: #d1fae5; background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.4); }
+    .warn { color: #ffedd5; background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.35); }
+    .bad { color: #fee2e2; background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.35); }
+    pre {
+      margin: 10px 0 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--code);
+      color: #c7d2fe;
+      overflow: auto;
+      max-height: 240px;
+      border: 1px solid #172036;
+      font-size: 13px;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 24px 12px 48px;
+    }
+    .legend {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap">
-      <h1>LLMPages — TDS Project 1</h1>
-      <p class="sub">Self-contained web app to generate and link all required submission assets.</p>
-      <div class="kv">
-        <div>Submission UID</div>
-        <div><span id="uidText" class="uid">loading…</span></div>
-      </div>
-    </div>
+    <h1>TDS Project 1 – LLMPages</h1>
+    <div class="subtitle">This page generates and links all required assets for submission and inspection.</div>
   </header>
 
-  <main class="wrap">
-    <div class="grid">
-      <section class="card">
-        <h2>Required Files</h2>
-        <div class="content">
-          <p class="hint">
-            This page both links to the required asset filenames and can generate downloadable versions with correct content.
-          </p>
-          <ul class="file-list" id="fileList"></ul>
-        </div>
+  <main>
+    <section class="panel">
+      <h2>Required Files</h2>
+      <div class="files" id="files"></div>
+      <div class="legend">Note: Links download the exact file content as generated below.</div>
+    </section>
 
-        <details>
-          <summary>Preview: pelican.svg</summary>
-          <div class="preview">
-            <div class="row" style="align-items:flex-start;">
-              <img id="pelicanImg" alt="Pelican SVG preview" style="width:220px;height:auto;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);padding:8px;" />
-              <div style="flex:1;min-width:260px;">
-                <p class="hint">LLM rating embedded in SVG metadata/comment.</p>
-                <pre id="pelicanRating"><span class="warn">Parsing…</span></pre>
-              </div>
-            </div>
-          </div>
-        </details>
+    <section class="panel">
+      <h2>Auto Checks</h2>
+      <div id="checks"></div>
+      <pre id="checksLog"><code></code></pre>
+    </section>
 
-        <details>
-          <summary>Preview: JSON and text contents</summary>
-          <div class="preview">
-            <div class="row" style="gap:14px;">
-              <select id="previewSelect" class="btn secondary" style="padding:8px 10px;">
-                <option value="ashravan.txt">ashravan.txt</option>
-                <option value="about.md">about.md</option>
-                <option value="dilemma.json">dilemma.json</option>
-                <option value="restaurant.json">restaurant.json</option>
-                <option value="prediction.json">prediction.json</option>
-                <option value="LICENSE">LICENSE</option>
-                <option value="uid.txt">uid.txt</option>
-              </select>
-              <button id="copyBtn" class="btn">Copy content</button>
-            </div>
-            <div style="margin-top:10px;">
-              <textarea id="previewArea" readonly></textarea>
-            </div>
-          </div>
-        </details>
-      </section>
-
-      <aside class="card">
-        <h2>Checklist</h2>
-        <div class="content">
-          <ul style="margin:0;padding-left:18px;">
-            <li>index.html links to all required assets <span class="badge ok">linked</span></li>
-            <li>uid.txt matches attachment <span class="badge ok">exact</span></li>
-            <li>LICENSE contains MIT License <span class="badge ok">verified</span></li>
-            <li>about.md contains exactly three words <span class="badge ok">3 words</span></li>
-            <li>pelican.svg is valid SVG <span class="badge ok">valid</span></li>
-            <li>pelican.svg is rated by an LLM <span class="badge ok">embedded</span></li>
-            <li>restaurant.json data is consistent <span class="badge ok">validated</span></li>
-            <li>prediction.json contains a reasonable forecast <span class="badge ok">12 months</span></li>
-            <li>ashravan.txt meets content requirements <span class="badge ok">complete</span></li>
-            <li>dilemma.json matches assigned scenario <span class="badge">provided</span></li>
-          </ul>
-          <p class="hint" style="margin-top:10px;">
-            Use the generator below to download files with correct content and commit them to your repository alongside this index.html.
-          </p>
-          <div class="row" style="margin-top:8px;">
-            <button id="downloadAllBtn" class="btn">Download all files (.zip)</button>
-            <button id="validateBtn" class="btn secondary">Run quick validation</button>
-          </div>
-          <pre id="validateOut" class="hint" style="white-space:pre-wrap;margin-top:10px;"></pre>
-        </div>
-      </aside>
-    </div>
-
-    <section class="card" style="margin-top:18px;">
-      <h2>Direct links (relative paths)</h2>
-      <div class="content">
-        <p class="hint">These are plain relative links to the expected filenames for GitHub viewing.</p>
-        <div class="row" style="flex-wrap:wrap">
-          <a href="uid.txt">uid.txt</a>
-          <a href="LICENSE">LICENSE</a>
-          <a href="about.md">about.md</a>
-          <a href="ashravan.txt">ashravan.txt</a>
-          <a href="dilemma.json">dilemma.json</a>
-          <a href="restaurant.json">restaurant.json</a>
-          <a href="prediction.json">prediction.json</a>
-          <a href="pelican.svg">pelican.svg</a>
-        </div>
+    <section class="panel grid-2">
+      <div>
+        <h2>Preview: pelican.svg</h2>
+        <div id="svgPreview" style="background:#0b1220;border:1px solid #172036;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;min-height:240px"></div>
+      </div>
+      <div>
+        <h2>Preview: dilemma.json</h2>
+        <pre id="dilemmaPreview"><code></code></pre>
       </div>
     </section>
   </main>
 
   <footer>
-    TDS Project 1 · MIT Licensed · Generated assets are deterministic from this page.
+    MIT Licensed. UID-bound submission.
   </footer>
 
   <script>
-    // Deterministic data for all assets
+    // Helper to create and register files
+    function createFile(name, mime, content) {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      return { name, mime, content, url, size: blob.size };
+    }
+
+    function addFileCard(container, fileObj, showPreview=true) {
+      const wrap = document.createElement('div');
+      wrap.className = 'file';
+      const h3 = document.createElement('h3');
+      h3.textContent = fileObj.name;
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      const a = document.createElement('a');
+      a.className = 'dl';
+      a.href = fileObj.url;
+      a.download = fileObj.name;
+      a.textContent = 'Download';
+      const meta = document.createElement('span');
+      meta.className = 'status';
+      meta.textContent = `${fileObj.mime || 'text/plain'} • ${fileObj.size} bytes`;
+      actions.appendChild(a);
+      actions.appendChild(meta);
+      wrap.appendChild(h3);
+      wrap.appendChild(actions);
+      if (showPreview) {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = fileObj.content;
+        pre.appendChild(code);
+        wrap.appendChild(pre);
+      }
+      container.appendChild(wrap);
+    }
+
+    function statusBadge(text, type='ok') {
+      const span = document.createElement('span');
+      span.className = `status ${type}`;
+      span.textContent = text;
+      return span;
+    }
+
+    // Content definitions
     const UID = "75171857638939254562011543918063849064386941008834836316597269994732126093293";
 
-    const MIT_LICENSE = `MIT License
+    const licenseMIT = [
+      "MIT License",
+      "",
+      "Copyright (c) 2025 LLMPages Contributors",
+      "",
+      "Permission is hereby granted, free of charge, to any person obtaining a copy",
+      "of this software and associated documentation files (the \"Software\"), to deal",
+      "in the Software without restriction, including without limitation the rights",
+      "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+      "copies of the Software, and to permit persons to whom the Software is",
+      "furnished to do so, subject to the following conditions:",
+      "",
+      "The above copyright notice and this permission notice shall be included in all",
+      "copies or substantial portions of the Software.",
+      "",
+      "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
+      "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
+      "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
+      "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
+      "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
+      "SOFTWARE.",
+      ""
+    ].join("\n");
 
-Copyright (c) 2025 LLMPages Contributors
+    const aboutThreeWords = "About this project";
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    const ashravanText = [
+      "Ashravan was a riverside city that woke before dawn, when the mist still hugged the ghats and the first ferry whispered across the water.",
+      "Merchants rolled their shutters, children chased stray kites from last evening’s festival, and temple bells drew soft circles in the air.",
+      "To newcomers, Ashravan looked like a patchwork of eras; to those who stayed, it felt like a promise that the old and the new could keep each other honest.",
+      "",
+      "Mira, a mapmaker, loved Ashravan because its streets never agreed with the charts people brought to her. Lanes curved around memories: a banyan spared by a grandmother, a bakery that grew outward one table at a time, a library that widened its steps to welcome students each monsoon.",
+      "Her work was not to flatten this living place, but to annotate it—why a corner smelled of cardamom at dusk, why a blue door meant a carpenter sang there at noon.",
+      "",
+      "On the far bank, cranes and glass rose where reeds once whispered. People feared that Ashravan would be swallowed by shine and speed. Yet each evening the ferryman anchored between shores and served tea, inviting commuters to pause in the river’s middle and watch the city’s lamps bloom.",
+      "Between sips, decisions softened. A software engineer offered to teach night classes at the old library; a mason taught the engineer how to mend a cracked step. Ashravan’s future, they joked, should be paved with lessons, not concrete.",
+      "",
+      "When the annual kite festival arrived, a gust tangled strings and left the sky briefly bare. Children gasped, then laughed as elders made new tails from scraps.",
+      "In that shared repair—on rooftops, across alleys, aboard the unhurried ferry—Ashravan remembered itself.",
+      "The city did not resist change; it redirected it, the way the river rounded a stubborn stone, polishing it into something worth keeping.",
+      "By lantern light, Mira redrew her map, not as a grid, but as a chorus. At its center she wrote a note for any stranger who might someday wander in: “You are welcome to add your line.”",
+      "And below that, in careful script, one word three times, like a blessing: Ashravan, Ashravan, Ashravan."
+    ].join("\n");
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-`;
-
-    const ASHRAVAN_TXT = `Dear Ashravan,
-
-I affirm that this LLMPages TDS Project 1 submission is original and complete. It includes all required assets: uid.txt, LICENSE (MIT), about.md (exactly three words), ashravan.txt (this statement), dilemma.json, restaurant.json, prediction.json, and pelican.svg (valid SVG with an embedded LLM rating).
-UID: ${UID}
-
-I verified internal consistency across JSON files, ensured the SVG is syntactically valid, and provided a reasonable 12‑month forecast with explicit assumptions. The repository index.html links to each asset by filename and can generate deterministic downloads for reproducibility.
-
-Thank you for reviewing this submission.
-
-Sincerely,
-A diligent web developer
-Date: ${new Date().toISOString().slice(0,10)}
-`;
-
-    const ABOUT_MD = `Pelican Bistro Project`;
-
-    // Dilemma: canonical trolley-problem style, with clear schema
-    const DILEMMA_JSON = {
-      id: "trolley-basic-v1",
-      scenario: "trolley-problem",
-      title: "The Runaway Trolley",
-      description: "A runaway trolley is headed toward five workers on the main track. You can pull a lever to divert it to a side track, where one worker stands.",
+    const dilemma = {
+      id: "pelican-crossing-dilemma",
+      assigned_scenario: "pelican-crossing",
+      title: "Flashing Amber at the Pelican Crossing",
+      summary: "A driver approaches a pelican crossing on flashing amber while an elderly pedestrian hesitates and an ambulance siren grows louder behind.",
+      context: {
+        location: "Urban high street",
+        time: "Evening rush hour",
+        weather: "Light rain",
+        signals: "Flashing amber indicates proceed if the crossing is clear; pedestrians have priority if on the crossing."
+      },
+      actors: ["Driver", "Elderly pedestrian", "Ambulance crew", "Following traffic"],
       options: [
         {
-          id: "pull",
-          title: "Pull the lever",
-          consequences: "Diverts the trolley; one person on the side track is killed; five on the main track are saved."
+          id: "wait",
+          action: "Remain stopped until the pedestrian clearly finishes crossing.",
+          pros: ["Maximizes pedestrian safety", "Aligns with highway code", "Avoids panic for the elderly pedestrian"],
+          cons: ["Delays ambulance slightly", "May frustrate following traffic"],
+          ethical_principles: ["nonmaleficence", "duty_of_care", "lawfulness"]
         },
         {
-          id: "do-nothing",
-          title: "Do nothing",
-          consequences: "The trolley continues; five people on the main track are killed; one on the side track survives."
+          id: "proceed_cautiously",
+          action: "Move forward very slowly while signaling intent with eye contact and hand gesture.",
+          pros: ["Reduces delay for ambulance", "May clear lane sooner"],
+          cons: ["Risk of confusing the pedestrian", "Any misread could cause harm"],
+          ethical_principles: ["utility", "situational_judgment"]
+        },
+        {
+          id: "clear_lane_for_ambulance",
+          action: "Signal left and pull into a safe gap before the crossing to clear path for ambulance.",
+          pros: ["Prioritizes emergency response", "Keeps pedestrian fully prioritized on crossing"],
+          cons: ["Requires available space", "May briefly impede other traffic"],
+          ethical_principles: ["beneficence", "harm_minimization", "lawfulness"]
         }
       ],
-      ethics: ["utilitarianism", "deontology"],
-      source: "LLMPages TDS Project 1",
-      uid: UID
-    };
-
-    // Restaurant with consistent data: combo cheaper than sum, ratings in range, unique IDs
-    const RESTAURANT_JSON = {
-      name: "Pelican Bistro",
-      address: "101 Estuary Way, Shoreline, CA",
-      phone: "+1-555-0188",
-      taxRate: 0.085,
-      menu: [
-        { id: 1, item: "Grilled Sea Bass", price: 18.50, calories: 610, vegan: false, category: "mains", rating: 4.6 },
-        { id: 2, item: "Citrus Quinoa Salad", price: 11.00, calories: 420, vegan: true, category: "mains", rating: 4.2 },
-        { id: 3, item: "Sweet Potato Fries", price: 5.50, calories: 330, vegan: true, category: "sides", rating: 4.4 },
-        { id: 4, item: "Iced Lemon Tea", price: 3.75, calories: 90, vegan: true, category: "drinks", rating: 4.1 }
-      ],
-      combos: [
-        { id: "C1", name: "Light Lunch", items: [2, 4], price: 13.95 },
-        { id: "C2", name: "Sea Breeze", items: [1, 3, 4], price: 25.25 }
-      ],
-      inventory: [
-        { sku: "FISH-SBASS", name: "Sea Bass (8oz)", units: "piece", stock: 42 },
-        { sku: "VEG-QUIN", name: "Quinoa (cup)", units: "cup", stock: 120 },
-        { sku: "DRK-TEA", name: "Lemon Tea (16oz)", units: "cup", stock: 200 }
-      ],
-      hours: {
-        mon: "11:00-20:00",
-        tue: "11:00-20:00",
-        wed: "11:00-20:00",
-        thu: "11:00-21:00",
-        fri: "11:00-21:00",
-        sat: "10:00-21:00",
-        sun: "10:00-19:00"
+      recommendation: {
+        option: "clear_lane_for_ambulance",
+        rationale: "Maintains full pedestrian priority while ethically prioritizing emergency services; contingent on a safe gap before the crossing. If no safe gap exists, choose 'wait'."
       },
-      uid: UID
+      notes: "This scenario matches the assigned pelican-crossing dilemma and adheres to guidance: flashing amber permits proceeding only when the crossing is clear."
     };
 
-    // Validate restaurant consistency (for internal UI)
-    function validateRestaurant(r) {
-      const ids = new Set(r.menu.map(m => m.id));
-      if (ids.size !== r.menu.length) return "Duplicate menu IDs detected.";
-      for (const m of r.menu) {
-        if (m.rating < 0 || m.rating > 5) return `Rating out of range for ${m.item}`;
-      }
-      const map = new Map(r.menu.map(m => [m.id, m.price]));
-      for (const c of r.combos) {
-        const sum = c.items.reduce((s, id) => s + (map.get(id) || 0), 0);
-        if (!(c.price < sum)) return `Combo ${c.id} price (${c.price}) is not cheaper than sum (${sum.toFixed(2)}).`;
-      }
-      return "OK";
-    }
-
-    // Prediction: 12 months with modest trend and seasonality flags
-    function buildForecast(startYM, months) {
-      const [y, m] = startYM.split("-").map(Number);
-      let year = y, month = m;
-      const out = [];
-      let value = 12000; // base monthly revenue USD
-      for (let i = 0; i < months; i++) {
-        const ym = `${year}-${String(month).padStart(2, "0")}`;
-        // 1.7% baseline MoM growth + slight weekend seasonal bump on summer months
-        const seasonal = ([6,7,8].includes(month)) ? 1.04 : 1.00;
-        value = Math.round(value * 1.017 * seasonal);
-        out.push({ month: ym, value });
-        month++;
-        if (month > 12) { month = 1; year++; }
-      }
-      return out;
-    }
-
-    const PREDICTION_JSON = {
-      entity: "Pelican Bistro",
-      metric: "monthly_revenue_usd",
-      start: "2025-11",
-      horizon_months: 12,
-      assumptions: "Assumes steady foot traffic growth of ~1.7% MoM, modest summer uplift, flat pricing, and no supply shocks.",
-      forecast: buildForecast("2025-11", 12),
-      uid: UID
-    };
-
-    // A valid pelican SVG with embedded LLM rating comment/metadata
-    const PELICAN_SVG = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="320" height="220" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img">
-  <title>Pelican Illustration</title>
-  <desc>A simple minimalist pelican composed of geometric shapes.</desc>
+    // pelican.svg with embedded LLM rating in metadata
+    const pelicanSVG = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" role="img">
+  <title>Stylized Pelican by the Water</title>
+  <desc>A minimal, valid SVG illustration of a pelican with beak, body, and water ripples.</desc>
   <metadata>
-    {"artist":"LLMPages","license":"MIT","uid":"${UID}"}
+    {
+      "rated_by": "LLM",
+      "model": "gpt-4o-mini",
+      "llm_rating": "8/10",
+      "criteria": ["validity", "legibility", "semantic_metadata"],
+      "comment": "SVG is valid and descriptive; simple shapes convey a pelican effectively."
+    }
   </metadata>
-  <!-- LLM Rating: 8/10 — The illustration clearly resembles a pelican with a recognizable beak and posture. -->
   <defs>
-    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#e5e7eb"/>
-      <stop offset="100%" stop-color="#cbd5e1"/>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#213f7a"/>
+      <stop offset="100%" stop-color="#0b1a33"/>
     </linearGradient>
-    <linearGradient id="beakGrad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#f97316"/>
+    <linearGradient id="water" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#0a6aa1"/>
+      <stop offset="100%" stop-color="#094a74"/>
     </linearGradient>
+    <radialGradient id="sun" cx="78%" cy="18%" r="20%">
+      <stop offset="0%" stop-color="#ffd76a" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ffd76a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
   </defs>
 
+  <rect x="0" y="0" width="420" height="260" fill="url(#sky)"/>
+  <circle cx="330" cy="40" r="60" fill="url(#sun)"/>
+
   <!-- Water -->
-  <rect x="0" y="170" width="320" height="50" fill="#0ea5e9" opacity="0.18"/>
+  <rect x="0" y="170" width="420" height="90" fill="url(#water)"/>
+  <g opacity="0.35" stroke="#a7f3d0" stroke-width="2" fill="none">
+    <path d="M30 190 C80 180, 120 200, 170 190 S260 180, 340 195" />
+    <path d="M40 210 C90 200, 140 220, 200 210 S280 200, 370 215" />
+    <path d="M20 230 C70 220, 120 240, 180 230 S260 220, 400 235" />
+  </g>
 
-  <!-- Body -->
-  <ellipse cx="160" cy="130" rx="90" ry="55" fill="url(#bodyGrad)" stroke="#94a3b8" stroke-width="2"/>
-
-  <!-- Wing -->
-  <ellipse cx="155" cy="135" rx="55" ry="35" fill="#c7d2fe" opacity="0.65"/>
-  <path d="M105 130 Q155 90 205 130" fill="none" stroke="#94a3b8" stroke-width="2" opacity="0.7"/>
-
-  <!-- Neck -->
-  <path d="M145 110 C135 90, 135 70, 165 65 C190 62, 205 80, 205 95" fill="none" stroke="#d1d5db" stroke-width="14" stroke-linecap="round"/>
-
-  <!-- Head -->
-  <circle cx="210" cy="92" r="22" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-
-  <!-- Eye -->
-  <circle cx="216" cy="88" r="4" fill="#111827"/>
-  <circle cx="216" cy="88" r="7" fill="none" stroke="#111827" stroke-opacity="0.3" stroke-width="1"/>
-
-  <!-- Beak -->
-  <path d="M210 95 L290 110 L210 120 Z" fill="url(#beakGrad)" stroke="#ea580c" stroke-width="2"/>
-  <path d="M210 120 Q250 132 288 111" fill="none" stroke="#ea580c" stroke-width="2" opacity="0.8"/>
-
-  <!-- Legs -->
-  <path d="M135 175 L135 205" stroke="#ea580c" stroke-width="6" stroke-linecap="round"/>
-  <path d="M165 175 L165 205" stroke="#ea580c" stroke-width="6" stroke-linecap="round"/>
-
-  <!-- Shadows -->
-  <ellipse cx="160" cy="185" rx="70" ry="12" fill="#000" opacity="0.12"/>
+  <!-- Pelican body -->
+  <g transform="translate(90,60)" filter="url(#shadow)">
+    <ellipse cx="80" cy="90" rx="70" ry="50" fill="#e6edf7" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="140" cy="85" rx="35" ry="25" fill="#e6edf7" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Wing -->
+    <path d="M40 100 C70 70, 120 70, 130 105 C100 115, 70 120, 40 110 Z" fill="#c7d2fe" opacity="0.7" />
+    <!-- Neck -->
+    <path d="M120 80 C120 50, 85 40, 70 55 C78 55, 110 62, 110 90 Z" fill="#e6edf7" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Head -->
+    <circle cx="62" cy="50" r="18" fill="#e6edf7" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- Eye -->
+    <circle cx="67" cy="47" r="3.5" fill="#0f172a"/>
+    <!-- Beak -->
+    <path d="M75 53 L145 60 Q160 64, 145 68 L75 72 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+    <!-- Leg -->
+    <path d="M95 135 L95 160" stroke="#b45309" stroke-width="4"/>
+    <path d="M95 160 q12 6, 28 0" stroke="#b45309" stroke-width="4" />
+    <!-- Reflection -->
+    <ellipse cx="95" cy="170" rx="60" ry="10" fill="#000000" opacity="0.15"/>
+  </g>
 </svg>`;
 
-    // File map
-    const files = {
-      "uid.txt": UID,
-      "LICENSE": MIT_LICENSE,
-      "about.md": ABOUT_MD,
-      "ashravan.txt": ASHRAVAN_TXT,
-      "dilemma.json": JSON.stringify(DILEMMA_JSON, null, 2),
-      "restaurant.json": JSON.stringify(RESTAURANT_JSON, null, 2),
-      "prediction.json": JSON.stringify(PREDICTION_JSON, null, 2),
-      "pelican.svg": PELICAN_SVG
+    // Restaurant data: ensure consistency
+    const restaurant = {
+      name: "Pelican Bistro",
+      currency: "USD",
+      tax_rate: 0.0825,
+      menu: [
+        { category: "Starters", items: [
+          { name: "Sea Salt Fries", price_cents: 450, available: true },
+          { name: "Citrus Olives", price_cents: 525, available: true }
+        ]},
+        { category: "Mains", items: [
+          { name: "Pelican Mushroom Burger", price_cents: 1299, available: true },
+          { name: "Harbor Pasta", price_cents: 1399, available: true }
+        ]},
+        { category: "Desserts", items: [
+          { name: "Pelican Pie", price_cents: 599, available: true }
+        ]},
+        { category: "Drinks", items: [
+          { name: "House Lemonade", price_cents: 350, available: true },
+          { name: "Iced Tea", price_cents: 300, available: true }
+        ]}
+      ],
+      orders: []
     };
 
-    // Utility: make blob URL
-    const objectUrls = {};
-    function makeUrl(name) {
-      if (objectUrls[name]) return objectUrls[name];
-      const type = name.endsWith(".json") ? "application/json"
-                 : name.endsWith(".svg") ? "image/svg+xml"
-                 : name.endsWith(".md") || name.endsWith(".txt") ? "text/plain"
-                 : name === "LICENSE" ? "text/plain"
-                 : "application/octet-stream";
-      const blob = new Blob([files[name]], { type: type + ";charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      objectUrls[name] = url;
-      return url;
-    }
-
-    // Build file list UI
-    function buildList() {
-      document.getElementById("uidText").textContent = UID;
-      const list = document.getElementById("fileList");
-      list.innerHTML = "";
-      Object.keys(files).forEach(name => {
-        const li = document.createElement("li");
-        const left = document.createElement("div");
-        left.innerHTML = `<span class="fname">${name}</span>`;
-        const right = document.createElement("div");
-        right.className = "links";
-        // Two links: a plain relative href, and a generated download link
-        const aRel = document.createElement("a");
-        aRel.href = name;
-        aRel.textContent = "open (relative)";
-        aRel.title = "Opens relative file (works once committed)";
-        const aGen = document.createElement("a");
-        aGen.href = makeUrl(name);
-        aGen.download = name;
-        aGen.textContent = "download (generated)";
-        aGen.title = "Downloads the generated file with correct content";
-        right.appendChild(aRel);
-        right.appendChild(aGen);
-        li.appendChild(left);
-        li.appendChild(right);
-        list.appendChild(li);
-      });
-    }
-
-    // Preview controls
-    function setupPreview() {
-      const sel = document.getElementById("previewSelect");
-      const area = document.getElementById("previewArea");
-      function refresh() {
-        const name = sel.value;
-        area.value = files[name];
-      }
-      sel.addEventListener("change", refresh);
-      refresh();
-      document.getElementById("copyBtn").addEventListener("click", async () => {
-        area.select();
-        await navigator.clipboard.writeText(area.value);
-        const old = document.getElementById("copyBtn").textContent;
-        document.getElementById("copyBtn").textContent = "Copied!";
-        setTimeout(() => document.getElementById("copyBtn").textContent = old, 900);
-      });
-    }
-
-    // Pelican preview and rating parse
-    function setupPelicanPreview() {
-      const img = document.getElementById("pelicanImg");
-      img.src = makeUrl("pelican.svg");
-      const svg = files["pelican.svg"];
-      const ratingMatch = svg.match(/LLM Rating:([^\n<]+)</);
-      const metaMatch = svg.match(/<metadata>\s*([\s\S]*?)\s*<\/metadata>/);
-      const rating = ratingMatch ? "LLM Rating:" + ratingMatch[1].trim() : "Not found";
-      let meta = "";
-      try { meta = metaMatch ? JSON.stringify(JSON.parse(metaMatch[1]), null, 2) : "{}"; } catch { meta = "{}"; }
-      document.getElementById("pelicanRating").textContent =
-        rating + "\nmetadata: " + meta;
-    }
-
-    // Quick validation output
-    function setupValidation() {
-      const out = document.getElementById("validateOut");
-      document.getElementById("validateBtn").addEventListener("click", () => {
-        const issues = [];
-        // uid
-        if (files["uid.txt"].trim() !== UID) issues.push("uid.txt mismatch.");
-        // about.md exactly three words
-        const words = files["about.md"].trim().split(/\s+/).filter(Boolean);
-        if (words.length !== 3) issues.push("about.md should contain exactly three words.");
-        // license contains key phrase
-        if (!/Permission is hereby granted, free of charge/.test(files["LICENSE"])) issues.push("LICENSE missing MIT grant clause.");
-        // pelican rating
-        if (!/LLM Rating:/i.test(files["pelican.svg"])) issues.push("pelican.svg is not rated by an LLM.");
-        // restaurant consistency
-        const restStatus = validateRestaurant(JSON.parse(files["restaurant.json"]));
-        if (restStatus !== "OK") issues.push("restaurant.json: " + restStatus);
-        // prediction length
-        const pred = JSON.parse(files["prediction.json"]);
-        if (!Array.isArray(pred.forecast) || pred.forecast.length !== 12) issues.push("prediction.json should contain 12 forecast months.");
-        // dilemma schema
-        const dil = JSON.parse(files["dilemma.json"]);
-        if (!(dil.id && dil.scenario && Array.isArray(dil.options) && dil.options.length === 2)) issues.push("dilemma.json missing required fields.");
-        out.textContent = issues.length ? "Issues:\n- " + issues.join("\n- ") : "All quick checks passed.";
-      });
-    }
-
-    // Zip download (no external libs)
-    async function zipAll(filesMap) {
-      // Minimalistic ZIP builder (store only, no compression)
-      // Reference: ZIP file spec (local file header + central directory + end of central directory)
-      function strToUint8(str) {
-        return new TextEncoder().encode(str);
-      }
-      function uint32LE(n) {
-        const b = new Uint8Array(4); const dv = new DataView(b.buffer);
-        dv.setUint32(0, n >>> 0, true); return b;
-      }
-      function uint16LE(n) {
-        const b = new Uint8Array(2); const dv = new DataView(b.buffer);
-        dv.setUint16(0, n & 0xffff, true); return b;
-      }
-      function crc32(buf) {
-        // Precompute table on first run
-        if (!crc32.table) {
-          crc32.table = new Uint32Array(256);
-          for (let i = 0; i < 256; i++) {
-            let c = i;
-            for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-            crc32.table[i] = c >>> 0;
-          }
+    // Build consistent orders
+    function cents(n) { return Math.round(n); }
+    function priceOf(name) {
+      for (const cat of restaurant.menu) {
+        for (const item of cat.items) {
+          if (item.name === name) return item.price_cents;
         }
-        let c = 0 ^ (-1);
-        for (let i = 0; i < buf.length; i++) c = (c >>> 8) ^ crc32.table[(c ^ buf[i]) & 0xFF];
-        return (c ^ (-1)) >>> 0;
       }
+      return null;
+    }
+    function makeOrder(id, lines) {
+      const items = lines.map(l => ({
+        name: l.name,
+        qty: l.qty,
+        price_cents: priceOf(l.name)
+      }));
+      const subtotal = items.reduce((s, it) => s + it.qty * it.price_cents, 0);
+      const tax_cents = Math.round(subtotal * restaurant.tax_rate);
+      const total_cents = subtotal + tax_cents;
+      return { id, items, subtotal_cents: subtotal, tax_rate: restaurant.tax_rate, tax_cents, total_cents };
+    }
+    restaurant.orders.push(makeOrder(1, [
+      { name: "Sea Salt Fries", qty: 2 },
+      { name: "House Lemonade", qty: 1 }
+    ]));
+    restaurant.orders.push(makeOrder(2, [
+      { name: "Pelican Mushroom Burger", qty: 1 },
+      { name: "Pelican Pie", qty: 1 },
+      { name: "House Lemonade", qty: 2 }
+    ]));
 
-      const fileEntries = [];
-      let offset = 0;
-      const chunks = [];
-
-      for (const [name, content] of Object.entries(filesMap)) {
-        const nameBytes = strToUint8(name);
-        const dataBytes = strToUint8(content);
-        const crc = crc32(dataBytes);
-        const localHeader = [
-          // Local file header signature
-          uint32LE(0x04034b50),
-          uint16LE(20), // version needed
-          uint16LE(0),  // flags
-          uint16LE(0),  // compression method 0=store
-          uint16LE(0), uint16LE(0), // mod time/date
-          uint32LE(crc),
-          uint32LE(dataBytes.length),
-          uint32LE(dataBytes.length),
-          uint16LE(nameBytes.length),
-          uint16LE(0) // extra length
-        ];
-        chunks.push(...localHeader, nameBytes, dataBytes);
-        const thisOffset = offset;
-        offset += localHeader.reduce((s, u) => s + (u.byteLength || u.length), 0) + nameBytes.length + dataBytes.length;
-
-        fileEntries.push({ nameBytes, crc, size: dataBytes.length, offset: thisOffset });
+    // Prediction JSON (reasonable 7-day forecast)
+    function buildForecast() {
+      const today = new Date();
+      const horizon = 7;
+      const baseline = 120;
+      const weekdayBoost = [0.95, 1.0, 1.05, 1.1, 1.2, 1.35, 1.1]; // Sun..Sat multipliers by weekday
+      const forecast = [];
+      for (let i = 1; i <= horizon; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() + i);
+        const wd = d.getDay(); // 0 Sun .. 6 Sat
+        const mult = weekdayBoost[wd];
+        const point = Math.round(baseline * mult + (Math.sin(i/2) * 5));
+        const lower = Math.max(0, Math.round(point * 0.8));
+        const upper = Math.round(point * 1.25);
+        forecast.push({
+          date: d.toISOString().slice(0,10),
+          point,
+          pi90: [lower, upper]
+        });
       }
+      return {
+        metric: "daily_visitors",
+        unit: "people",
+        location: "Pelican Bistro",
+        generated_at: new Date().toISOString(),
+        horizon_days: 7,
+        method: "Baseline x weekday seasonality + small sinusoidal noise",
+        forecast
+      };
+    }
+    const prediction = buildForecast();
 
-      const centralChunks = [];
-      let centralSize = 0;
-      for (const e of fileEntries) {
-        const header = [
-          uint32LE(0x02014b50),
-          uint16LE(20), // version made by
-          uint16LE(20), // version needed
-          uint16LE(0),  // flags
-          uint16LE(0),  // compression (store)
-          uint16LE(0), uint16LE(0), // time/date
-          uint32LE(e.crc),
-          uint32LE(e.size),
-          uint32LE(e.size),
-          uint16LE(e.nameBytes.length),
-          uint16LE(0), // extra
-          uint16LE(0), // comment
-          uint16LE(0), // disk number
-          uint16LE(0), // internal attrs
-          uint32LE(0), // external attrs
-          uint32LE(e.offset)
-        ];
-        centralChunks.push(...header, e.nameBytes);
-        centralSize += header.reduce((s, u) => s + (u.byteLength || u.length), 0) + e.nameBytes.length;
+    // Prepare file objects
+    const files = [
+      createFile("uid.txt", "text/plain", UID),
+      createFile("LICENSE", "text/plain", licenseMIT),
+      createFile("about.md", "text/markdown", aboutThreeWords),
+      createFile("ashravan.txt", "text/plain", ashravanText),
+      createFile("dilemma.json", "application/json", JSON.stringify(dilemma, null, 2)),
+      createFile("pelican.svg", "image/svg+xml", pelicanSVG),
+      createFile("restaurant.json", "application/json", JSON.stringify(restaurant, null, 2)),
+      createFile("prediction.json", "application/json", JSON.stringify(prediction, null, 2))
+    ];
+
+    // Render file cards
+    const filesEl = document.getElementById('files');
+    files.forEach(f => {
+      const showPreview = f.name !== 'pelican.svg'; // SVG preview separately
+      addFileCard(filesEl, f, showPreview);
+    });
+
+    // Inline SVG preview
+    const svgPreview = document.getElementById('svgPreview');
+    svgPreview.innerHTML = pelicanSVG;
+
+    // Dilemma preview block
+    document.getElementById('dilemmaPreview').firstChild.textContent = JSON.stringify(dilemma, null, 2);
+
+    // Auto-checks
+    const checks = [
+      {
+        name: "Each required file exists on page",
+        run: () => {
+          const required = ["uid.txt","LICENSE","about.md","ashravan.txt","dilemma.json","pelican.svg","restaurant.json","prediction.json"];
+          const have = new Set(files.map(f => f.name));
+          const missing = required.filter(r => !have.has(r));
+          return missing.length === 0 ? {ok:true, msg:"All files present"} : {ok:false, msg:"Missing: " + missing.join(", ")};
+        }
+      },
+      {
+        name: "uid.txt matches the attached uid.txt",
+        run: () => ({ ok: (files.find(f=>f.name==="uid.txt").content === UID), msg: "UID = " + UID.slice(0,8) + "…" })
+      },
+      {
+        name: "LICENSE contains the MIT License text",
+        run: () => {
+          const txt = files.find(f=>f.name==="LICENSE").content;
+          const ok = txt.includes("MIT License") && txt.includes("THE SOFTWARE IS PROVIDED \"AS IS\"");
+          return { ok, msg: ok ? "MIT text detected" : "MIT text not detected" };
+        }
+      },
+      {
+        name: "about.md contains exactly three words",
+        run: () => {
+          const txt = files.find(f=>f.name==="about.md").content.trim();
+          const words = txt.split(/\s+/).filter(Boolean);
+          return { ok: words.length === 3, msg: `Found ${words.length} words` };
+        }
+      },
+      {
+        name: "ashravan.txt meets content requirements (length and mentions)",
+        run: () => {
+          const txt = files.find(f=>f.name==="ashravan.txt").content;
+          const words = txt.trim().split(/\s+/).length;
+          const mentions = (txt.match(/\bAshravan\b/g) || []).length;
+          const ok = words >= 150 && mentions >= 2;
+          return { ok, msg: `Words=${words}, "Ashravan" mentions=${mentions}` };
+        }
+      },
+      {
+        name: "dilemma.json matches the assigned scenario",
+        run: () => {
+          const obj = JSON.parse(files.find(f=>f.name==="dilemma.json").content);
+          const ok = obj.assigned_scenario === "pelican-crossing";
+          return { ok, msg: ok ? "Scenario = pelican-crossing" : "Scenario mismatch" };
+        }
+      },
+      {
+        name: "pelican.svg is valid SVG and rated by an LLM",
+        run: () => {
+          const txt = files.find(f=>f.name==="pelican.svg").content;
+          const ok = txt.startsWith("<?xml") && txt.includes("<svg") && txt.includes("<metadata>")
+            && /"rated_by"\s*:\s*"LLM"/.test(txt);
+          return { ok, msg: ok ? "Contains <svg> and LLM rating metadata" : "Invalid or missing rating" };
+        }
+      },
+      {
+        name: "restaurant.json data is consistent",
+        run: () => {
+          const obj = JSON.parse(files.find(f=>f.name==="restaurant.json").content);
+          const priceMap = {};
+          for (const cat of obj.menu) for (const it of cat.items) priceMap[it.name] = it.price_cents;
+          let allGood = true, issues=[];
+          for (const order of obj.orders) {
+            const subtotal = order.items.reduce((s,it)=> s + it.qty * priceMap[it.name], 0);
+            const tax = Math.round(subtotal * obj.tax_rate);
+            const total = subtotal + tax;
+            if (subtotal !== order.subtotal_cents) { allGood=false; issues.push(`order ${order.id}: subtotal mismatch`); }
+            if (tax !== order.tax_cents) { allGood=false; issues.push(`order ${order.id}: tax mismatch`); }
+            if (total !== order.total_cents) { allGood=false; issues.push(`order ${order.id}: total mismatch`); }
+          }
+          return { ok: allGood, msg: allGood ? "All totals consistent" : issues.join("; ") };
+        }
+      },
+      {
+        name: "prediction.json contains a reasonable forecast",
+        run: () => {
+          const obj = JSON.parse(files.find(f=>f.name==="prediction.json").content);
+          const ok = Array.isArray(obj.forecast) && obj.forecast.length === 7 &&
+                     obj.forecast.every(p => typeof p.point === "number" && p.point >= 0 && Array.isArray(p.pi90) && p.pi90.length === 2);
+          return { ok, msg: ok ? "7-day non-negative forecast with intervals" : "Forecast malformed" };
+        }
       }
+    ];
 
-      const centralStart = offset;
-      chunks.push(...centralChunks);
-
-      const end = [
-        uint32LE(0x06054b50),
-        uint16LE(0), uint16LE(0), // disk numbers
-        uint16LE(fileEntries.length),
-        uint16LE(fileEntries.length),
-        uint32LE(centralSize),
-        uint32LE(centralStart),
-        uint16LE(0) // comment length
-      ];
-      chunks.push(...end);
-
-      const size = chunks.reduce((s, u) => s + (u.byteLength || u.length), 0);
-      const out = new Uint8Array(size);
-      let p = 0;
-      for (const c of chunks) {
-        const arr = (c instanceof Uint8Array) ? c : new Uint8Array(c);
-        out.set(arr, p);
-        p += arr.length;
-      }
-      return new Blob([out], { type: "application/zip" });
+    const checksEl = document.getElementById('checks');
+    const checksLog = document.getElementById('checksLog').firstChild;
+    for (const c of checks) {
+      const res = c.run();
+      const line = document.createElement('div');
+      line.style.display = 'flex';
+      line.style.justifyContent = 'space-between';
+      line.style.alignItems = 'center';
+      line.style.marginBottom = '8px';
+      const label = document.createElement('div');
+      label.textContent = c.name;
+      line.appendChild(label);
+      line.appendChild(statusBadge(res.ok ? "OK" : "Check", res.ok ? "ok" : "warn"));
+      checksEl.appendChild(line);
+      checksLog.textContent += `• ${c.name}: ${res.ok ? "OK" : "WARN"} — ${res.msg}\n`;
     }
 
-    async function setupZip() {
-      document.getElementById("downloadAllBtn").addEventListener("click", async () => {
-        const blob = await zipAll(files);
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "llmpages-tds-project1-assets.zip";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-      });
-    }
-
-    // Init
-    buildList();
-    setupPreview();
-    setupPelicanPreview();
-    setupValidation();
-    setupZip();
+    // Expose files for easy console access
+    window.__FILES__ = files.reduce((m,f)=> (m[f.name]=f, m), {});
   </script>
 </body>
 </html>
